@@ -24,6 +24,11 @@ const App: React.FC = () => {
       setResult(`Try again. The word should start with ${currentLetter}`);
     }
     setWord('');
+    
+    // Clear the result message after 3 seconds
+    setTimeout(() => {
+      setResult('');
+    }, 2000);
   };
 
   useEffect(() => {
@@ -41,9 +46,11 @@ const App: React.FC = () => {
         placeholder="Enter a word"
       />
       <button onClick={checkWord}>Submit</button>
-      <div className={`result ${result.startsWith('Correct') ? 'correct' : 'incorrect'}`}>
-        {result}
-      </div>
+      {result && (
+        <div className={`result ${result.startsWith('Correct') ? 'correct' : 'incorrect'}`}>
+          {result}
+        </div>
+      )}
     </div>
   );
 };
