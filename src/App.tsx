@@ -5,6 +5,7 @@ const App: React.FC = () => {
   const [currentLetter, setCurrentLetter] = useState<string>('');
   const [word, setWord] = useState<string>('');
   const [result, setResult] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -16,19 +17,35 @@ const App: React.FC = () => {
     setCurrentLetter(getRandomLetter());
   };
 
-  const checkWord = (): void => {
+  const checkWordInDictionary = async (word: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+      return response.ok;
+    } catch (error) {
+      console.error('Error checking word:', error);
+      return false;
+    }
+  };
+
+  const checkWord = async (): Promise<void> => {
+    setIsLoading(true);
     if (word.toLowerCase().startsWith(currentLetter.toLowerCase())) {
-      setResult('Correct! Great job!');
-      setTimeout(updateLetter, 1500);
+      const isValidWord = await checkWordInDictionary(word);
+      if (isValidWord) {
+        setResult('Correct! Great job!');
+        setTimeout(updateLetter, 1500);
+      } else {
+        setResult(`"${word}" is not a valid word. Try again!`);
+      }
     } else {
       setResult(`Try again. The word should start with ${currentLetter}`);
     }
     setWord('');
+    setIsLoading(false);
     
-    // Clear the result message after 3 seconds
     setTimeout(() => {
       setResult('');
-    }, 2000);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -45,8 +62,11 @@ const App: React.FC = () => {
           value={word}
           onChange={(e) => setWord(e.target.value)}
           placeholder="Enter a word"
+          disabled={isLoading}
         />
-        <button onClick={checkWord}>Submit</button>
+        <button onClick={checkWord} disabled={isLoading}>
+          {isLoading ? 'Checking...' : 'Submit'}
+        </button>
         {result && (
           <div className={`result ${result.startsWith('Correct') ? 'correct' : 'incorrect'}`}>
             {result}
