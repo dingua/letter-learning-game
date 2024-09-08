@@ -1,11 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
+interface SpeechRecognitionEvent {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+}
+
+interface SpeechRecognitionResult {
+  [index: number]: SpeechRecognitionAlternative;
+  length: number;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+  message: string;
+}
+
 const App: React.FC = () => {
   const [currentLetter, setCurrentLetter] = useState<string>('');
   const [word, setWord] = useState<string>('');
   const [result, setResult] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isListening, setIsListening] = useState<boolean>(false);
 
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -52,6 +85,33 @@ const App: React.FC = () => {
     updateLetter();
   }, []);
 
+  const startListening = () => {
+    setIsListening(true);
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const speechResult = event.results[0][0].transcript;
+      setWord(speechResult.toLowerCase());
+      setIsListening(false);
+    };
+
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.error('Speech recognition error', event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+  };
+
   return (
     <div className="App">
       <h1>🎈 Letter Learning Game 🎈</h1>
@@ -62,9 +122,12 @@ const App: React.FC = () => {
           value={word}
           onChange={(e) => setWord(e.target.value)}
           placeholder="Enter a word"
-          disabled={isLoading}
+          disabled={isLoading || isListening}
         />
-        <button onClick={checkWord} disabled={isLoading}>
+        <button onClick={startListening} disabled={isLoading || isListening}>
+          {isListening ? 'Listening...' : 'Speak'}
+        </button>
+        <button onClick={checkWord} disabled={isLoading || isListening}>
           {isLoading ? 'Checking...' : 'Submit'}
         </button>
         {result && (
