@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/letter-learning-game/static/css/main.8b70ac47.css",
+    "main.js": "/letter-learning-game/static/js/main.f69d90b0.js",
+    "static/js/453.12491509.chunk.js": "/letter-learning-game/static/js/453.12491509.chunk.js",
+    "index.html": "/letter-learning-game/index.html",
+    "main.8b70ac47.css.map": "/letter-learning-game/static/css/main.8b70ac47.css.map",
+    "main.f69d90b0.js.map": "/letter-learning-game/static/js/main.f69d90b0.js.map",
+    "453.12491509.chunk.js.map": "/letter-learning-game/static/js/453.12491509.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8b70ac47.css",
+    "static/js/main.f69d90b0.js"
+  ]
+}
