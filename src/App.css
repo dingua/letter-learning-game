@@ -1,3 +1,8 @@
+body {
+  background-color: #ffebee; /* Light red background */
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
 .App {
   text-align: center;
   max-width: 600px;
@@ -5,31 +10,89 @@
   padding: 2rem;
 }
 
+h1 {
+  color: #d32f2f; /* Dark red */
+  font-size: 2.5rem;
+  text-shadow: 2px 2px #ffcdd2; /* Light red shadow */
+}
+
+.game-container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(211, 47, 47, 0.3); /* Red shadow */
+}
+
 .letter-display {
-  font-size: 4rem;
+  font-size: 6rem;
   margin: 1rem 0;
+  color: #d32f2f; /* Dark red */
+  text-shadow: 3px 3px #ffcdd2; /* Light red shadow */
 }
 
 input {
-  font-size: 1rem;
-  padding: 0.5rem;
+  font-size: 1.2rem;
+  padding: 0.7rem;
   margin-right: 0.5rem;
+  border: 3px solid #ff8a80; /* Light red border */
+  border-radius: 10px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #d32f2f; /* Dark red border on focus */
 }
 
 button {
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  padding: 0.7rem 1.5rem;
+  background-color: #ff5252; /* Red button */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #d32f2f; /* Darker red on hover */
 }
 
 .result {
   margin-top: 1rem;
   font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .correct {
-  color: green;
+  color: #4caf50; /* Green for correct answers */
 }
 
 .incorrect {
-  color: red;
+  color: #d32f2f; /* Red for incorrect answers */
+}
+
+.decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.star, .heart, .sun {
+  position: absolute;
+  font-size: 2rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.star { top: 10%; left: 10%; }
+.heart { top: 20%; right: 15%; }
+.sun { bottom: 15%; left: 15%; }
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
 }
